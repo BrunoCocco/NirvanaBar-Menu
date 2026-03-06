@@ -1,75 +1,62 @@
-Estamos construyendo el proyecto freelance llamado "NIRVANA BAR MENU".
+Estamos continuando el proyecto freelance "NIRVANA BAR MENU".
 
-Stack:
-
-* Next.js (App Router)
-* React
-* Supabase (database + auth + API)
-* Tailwind
-* Deploy en Vercel.
-
-Arquitectura del proyecto:
+Proyecto actual:
+- Stack: Next.js App Router, React, TypeScript/TSX, Supabase, Tailwind, deploy en Vercel.
+- El proyecto fue creado con `npx create-next-app@latest nirvana-bar-menu`, así que trabajamos con `.tsx` y `.ts`.
+- Mantener esta estructura:
 
 nirvana-bar-menu/
-
 app/
-page.tsx (menú público QR)
-admin/
-login/
-dashboard/
-
+  dashboard/page.tsx
+  login/page.tsx
+  globals.css
+  layout.tsx
+  page.tsx
 components/
-MenuItem
-SpecialCard
-
+  MenuItemCard.tsx
+  SpecialBanner.tsx
 lib/
-supabaseClient
+  supabaseClient.ts
+database/
+  schema.sql
+.env.local
+package.json
+tsconfig.json
 
-database:
-menu_items
-specials
+No cambiar innecesariamente estos nombres:
+- tablas: public.menu_items, public.specials
+- campos menu_items: id, name, description, price, category, available
+- campos specials: id, type, title, description, price, start_time, end_time, updated_at
+- values de specials.type: plato_dia, menu_semana, vino_casa
 
-Tabla menu_items:
-id
-name
-description
-price
-category
-available
+No cambiar innecesariamente estas variables y funciones:
+- app/page.tsx:
+  menuItems, specials, loading, errorMessage, loadMenuData, groupedMenu, platoDia, menuSemana, vinoCasa
+- app/login/page.tsx:
+  email, password, errorMessage, loading, router, handleLogin
+- app/dashboard/page.tsx:
+  specials, loading, errorMessage, router, checkSessionAndLoadData, handleChange, saveSpecial, handleLogout
+- cliente Supabase exportado como: supabase
 
-Tabla specials:
-id
-type (plato_dia, menu_semana, vino_casa)
-title
-description
-price
-start_time
-end_time
-updated_at
+Estado actual:
+- Supabase ya está creado y conectado.
+- Las tablas y RLS/policies ya están hechas.
+- El menú público ya funciona.
+- El login ya funciona.
+- El dashboard base ya está creado.
+- La estética ya está definida: fondo oscuro, superficies crema/papel, acento mostaza/naranja, look editorial premium.
+- Ya sabemos que faltan validaciones mejores en formularios, pulido visual del dashboard, revisión mobile QR y preparación para deploy.
 
-El dashboard permitirá editar:
+Forma de trabajo:
+- Quiero seguir construyendo a partir de este punto.
+- Quiero que trabajes paso a paso.
+- Quiero código comentado.
+- Quiero explicaciones claras, pero sin rehacer lo ya decidido.
+- No inventes arquitectura nueva.
+- No cambies nombres salvo necesidad real.
+- Si proponés mejoras, que sean incrementales sobre la base actual.
 
-* plato del día
-* menú de la semana
-* vino de la casa
-  con precio y horario.
-
-El menú público mostrará los datos desde Supabase mediante queries del cliente supabase-js.
-
-Objetivo actual:
-continuar desarrollo paso a paso del proyecto completo hasta deploy.
-
-Árbol de trabajo
-
-/app/page.js
-/app/login/page.js
-/app/dashboard/page.js
-/components/MenuItemCard.js
-/components/SpecialBanner.js
-/lib/supabaseClient.js
-/database/schema.sql
-/app/layout.js
-/app/globals.css
-/.env.local
-/package.json
-/jsconfig.json
+Tu tarea al retomar:
+1. Hacé un resumen breve del estado actual.
+2. Decime cuál es el siguiente paso técnico más lógico.
+3. Continuá el desarrollo desde ahí.
