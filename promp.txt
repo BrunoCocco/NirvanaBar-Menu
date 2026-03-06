@@ -1,0 +1,75 @@
+Estamos construyendo el proyecto freelance llamado "NIRVANA BAR MENU".
+
+Stack:
+
+* Next.js (App Router)
+* React
+* Supabase (database + auth + API)
+* Tailwind
+* Deploy en Vercel.
+
+Arquitectura del proyecto:
+
+nirvana-bar-menu/
+
+app/
+page.tsx (menú público QR)
+admin/
+login/
+dashboard/
+
+components/
+MenuItem
+SpecialCard
+
+lib/
+supabaseClient
+
+database:
+menu_items
+specials
+
+Tabla menu_items:
+id
+name
+description
+price
+category
+available
+
+Tabla specials:
+id
+type (plato_dia, menu_semana, vino_casa)
+title
+description
+price
+start_time
+end_time
+updated_at
+
+El dashboard permitirá editar:
+
+* plato del día
+* menú de la semana
+* vino de la casa
+  con precio y horario.
+
+El menú público mostrará los datos desde Supabase mediante queries del cliente supabase-js.
+
+Objetivo actual:
+continuar desarrollo paso a paso del proyecto completo hasta deploy.
+
+Árbol de trabajo
+
+/app/page.js
+/app/login/page.js
+/app/dashboard/page.js
+/components/MenuItemCard.js
+/components/SpecialBanner.js
+/lib/supabaseClient.js
+/database/schema.sql
+/app/layout.js
+/app/globals.css
+/.env.local
+/package.json
+/jsconfig.json
