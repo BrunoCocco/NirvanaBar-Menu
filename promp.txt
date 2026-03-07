@@ -1,10 +1,16 @@
 Estamos continuando el proyecto freelance "NIRVANA BAR MENU".
 
-Proyecto actual:
-- Stack: Next.js App Router, React, TypeScript/TSX, Supabase, Tailwind, deploy en Vercel.
-- El proyecto fue creado con `npx create-next-app@latest nirvana-bar-menu`, así que trabajamos con `.tsx` y `.ts`.
-- Mantener esta estructura:
+Quiero que retomes exactamente desde el estado actual del proyecto, sin rehacer decisiones ya tomadas, sin inventar arquitectura nueva y sin renombrar variables, funciones, archivos o tipos salvo necesidad técnica real.
 
+STACK Y BASE DEL PROYECTO
+- Next.js App Router
+- React
+- TypeScript / TSX
+- Supabase
+- Tailwind
+- Deploy previsto en Vercel
+
+ESTRUCTURA A MANTENER
 nirvana-bar-menu/
 app/
   dashboard/page.tsx
@@ -23,40 +29,168 @@ database/
 package.json
 tsconfig.json
 
-No cambiar innecesariamente estos nombres:
-- tablas: public.menu_items, public.specials
+NO CAMBIAR INNECESARIAMENTE ESTOS NOMBRES
+- tablas: public.menu_items, public.specials, public.menu_sections
 - campos menu_items: id, name, description, price, category, available
-- campos specials: id, type, title, description, price, start_time, end_time, updated_at
-- values de specials.type: plato_dia, menu_semana, vino_casa
+- campos specials: id, type, title, description, price, start_time, end_time, updated_at, image_url, is_visible
+- values de specials.type:
+  - plato_dia
+  - menu_semana
+  - vino_casa
+  - promocion_1
+  - promocion_2
+  - promocion_3
+  - ensaladas_casa
 
-No cambiar innecesariamente estas variables y funciones:
+VARIABLES Y FUNCIONES QUE QUIERO MANTENER
 - app/page.tsx:
-  menuItems, specials, loading, errorMessage, loadMenuData, groupedMenu, platoDia, menuSemana, vinoCasa
+  - menuItems
+  - specials
+  - loading
+  - errorMessage
+  - loadMenuData
+  - groupedMenu
+  - platoDia
+  - menuSemana
+  - vinoCasa
+  - promocion1
+  - promocion2
+  - promocion3
+  - ensaladasCasa
+  - topSpecials
+  - language
+  - translations
+  - staticSections
 - app/login/page.tsx:
-  email, password, errorMessage, loading, router, handleLogin
+  - email
+  - password
+  - errorMessage
+  - loading
+  - router
+  - handleLogin
 - app/dashboard/page.tsx:
-  specials, loading, errorMessage, router, checkSessionAndLoadData, handleChange, saveSpecial, handleLogout
-- cliente Supabase exportado como: supabase
+  - specials
+  - loading
+  - errorMessage
+  - router
+  - checkSessionAndLoadData
+  - handleChange
+  - saveSpecial
+  - handleLogout
+  - handleImageSelection
+  - uploadSpecialImage
+  - pendingImages
+  - specialLabels
+  - specialOrder
+- lib/supabaseClient.ts:
+  - supabase
 
-Estado actual:
-- Supabase ya está creado y conectado.
-- Las tablas y RLS/policies ya están hechas.
-- El menú público ya funciona.
-- El login ya funciona.
-- El dashboard base ya está creado.
-- La estética ya está definida: fondo oscuro, superficies crema/papel, acento mostaza/naranja, look editorial premium.
-- Ya sabemos que faltan validaciones mejores en formularios, pulido visual del dashboard, revisión mobile QR y preparación para deploy.
+ESTADO ACTUAL REAL DEL PROYECTO
+- Supabase ya está creado y conectado
+- Las tablas y RLS/policies base ya están funcionando
+- login funciona
+- dashboard funciona
+- dashboard ya edita SOLO los especiales
+- dashboard ya permite:
+  - editar título
+  - editar descripción
+  - editar precio
+  - editar start_time
+  - editar end_time
+  - cambiar is_visible
+  - subir imagen a Supabase Storage
+- bucket de Storage usado para imágenes:
+  - specials-images
+- Storage policy ya resuelta y funcionando
+- el front público ya:
+  - carga specials
+  - filtra por is_visible
+  - muestra image_url
+  - no renderiza campos vacíos
+  - soporta promociones y ensaladas
+- components/SpecialBanner.tsx ya fue iterado para:
+  - soportar image_url
+  - ocultar description vacía
+  - ocultar precio vacío
+  - ocultar horarios vacíos
+- app/page.tsx ya fue iterado para:
+  - reordenar hero
+  - tener nombre del bar centrado
+  - tener selector de idioma arriba a la derecha
+  - usar estado local language con idiomas:
+    - es
+    - en
+    - fr
+    - de
+  - usar objeto translations para textos de interfaz
+  - mostrar topSpecials arriba
+  - mantener vinoCasa abajo
+  - mostrar sección visual de accesos fijos del menú con staticSections
+- IMPORTANTE:
+  - los botones de secciones del menú todavía NO navegan a PDFs reales
+  - actualmente hacen alert(...)
+  - ese es el siguiente paso grande
 
-Forma de trabajo:
-- Quiero seguir construyendo a partir de este punto.
-- Quiero que trabajes paso a paso.
-- Quiero código comentado.
-- Quiero explicaciones claras, pero sin rehacer lo ya decidido.
-- No inventes arquitectura nueva.
-- No cambies nombres salvo necesidad real.
-- Si proponés mejoras, que sean incrementales sobre la base actual.
+REGLAS FUNCIONALES IMPORTANTES
+- el cliente SOLO puede editar especiales
+- los PDFs del menú son fijos y los cargo yo, no el cliente
+- eso está hecho así a propósito por negocio: yo quiero cobrar futuras revisiones de esa parte
+- specials visibles/editables:
+  - plato del día
+  - menú de la semana
+  - vino del mes visualmente, pero type técnico sigue siendo vino_casa
+  - promoción 1
+  - promoción 2
+  - promoción 3
+  - ensaladas de la casa
+- si description / price / start_time / end_time están vacíos:
+  - NO deben renderizarse en el front
+- las imágenes de specials deben adaptarse a móvil y no desbordar lateralmente
+- el cliente puede usar imágenes IA o fotos hechas con su móvil
+- la web debe encajarlas visualmente sin romper el layout
 
-Tu tarea al retomar:
-1. Hacé un resumen breve del estado actual.
-2. Decime cuál es el siguiente paso técnico más lógico.
-3. Continuá el desarrollo desde ahí.
+IDIOMAS Y PDFs
+- idiomas activos:
+  - español
+  - inglés
+  - francés
+  - alemán
+- español es la base visual inicial
+- existe tabla public.menu_sections para almacenar PDFs y títulos por idioma
+- la idea es que las secciones fijas del menú usen PDFs por idioma
+- el fallback de PDFs debe ser:
+  1. español
+  2. inglés
+  3. alemán
+  4. francés
+- la próxima fase es construir la vista interna del PDF con:
+  - navegación real desde los botones
+  - botón claro para volver
+  - lectura de la sección
+  - elección del PDF correcto por idioma con fallback
+- todavía NO hicimos esa parte
+
+ESTÉTICA Y DIRECCIÓN VISUAL
+- fondo oscuro
+- superficies crema / papel
+- acento mostaza / naranja
+- look editorial premium
+- pensado para QR y uso móvil
+- UX simple y muy clara para clientes del bar
+
+FORMA DE TRABAJO
+- trabajar paso a paso
+- código comentado
+- explicaciones claras
+- no rehacer lo decidido
+- no inventar nuevas capas si no hacen falta
+- no cambiar nombres salvo necesidad real
+- si proponés mejoras, que sean incrementales y compatibles con esta base
+- antes de pasar código, explicame brevemente el cambio y por qué
+- si hay que tocar Supabase, explicame primero el flow
+
+TU TAREA AL RETOMAR
+1. Hacé un resumen breve del estado actual
+2. Decime cuál es el siguiente paso técnico más lógico
+3. Continuá el desarrollo desde ahí
+4. Respetá todos los nombres y el contexto ya fijado
