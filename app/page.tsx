@@ -1,19 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import MenuItemCard from "@/components/MenuItemCard";
 import SpecialBanner from "@/components/SpecialBanner";
-
-// Tipo para los ítems del menú
-type MenuItem = {
-  id: number;
-  name: string;
-  description: string | null;
-  price: number;
-  category: string;
-  available: boolean;
-};
 
 // Tipo para los specials
 type Special = {
@@ -33,7 +22,6 @@ type Special = {
 type Language = "es" | "en" | "fr" | "de";
 
 export default function HomePage() {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [specials, setSpecials] = useState<Special[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -50,29 +38,14 @@ export default function HomePage() {
     setErrorMessage("");
 
     try {
-      const [menuResponse, specialsResponse] = await Promise.all([
-        supabase
-          .from("menu_items")
-          .select("*")
-          .eq("available", true)
-          .order("category", { ascending: true })
-          .order("name", { ascending: true }),
+      const { data, error } = await supabase.from("specials").select("*");
 
-        supabase.from("specials").select("*"),
-      ]);
-
-      if (menuResponse.error) {
-        console.error("Error en menu_items:", menuResponse.error);
-        throw new Error(menuResponse.error.message);
+      if (error) {
+        console.error("Error en specials:", error);
+        throw new Error(error.message);
       }
 
-      if (specialsResponse.error) {
-        console.error("Error en specials:", specialsResponse.error);
-        throw new Error(specialsResponse.error.message);
-      }
-
-      setMenuItems((menuResponse.data as MenuItem[]) || []);
-      setSpecials((specialsResponse.data as Special[]) || []);
+      setSpecials((data as Special[]) || []);
     } catch (error) {
       console.error("Error cargando datos:", error);
       setErrorMessage("No se pudo cargar la carta en este momento.");
@@ -91,15 +64,13 @@ export default function HomePage() {
   */
   const translations = {
     es: {
-      eyebrow: "Bar · Tapas · Son Veri Nou",
+      eyebrow: "Son Veri Nou",
       digitalMenu: "Carta digital",
       intro:
         "Cocina casual con identidad propia, especiales del día y carta pensada para una lectura rápida desde QR.",
       exploreMenu: "Explorar carta",
       exploreSubtitle:
         "Elegí una sección para ver el menú completo en tu idioma.",
-      currentMenu: "Menú actual",
-      currentMenuTitle: "Nuestra carta",
       categories: {
         carta: "Carta",
         tostadas_bocadillos: "Tostadas / Bocadillos",
@@ -110,15 +81,13 @@ export default function HomePage() {
       },
     },
     en: {
-      eyebrow: "Bar · Tapas · Son Veri Nou",
+      eyebrow: "Son Veri Nou",
       digitalMenu: "Digital menu",
       intro:
         "Casual cuisine with its own identity, daily specials and a menu designed for quick QR reading.",
       exploreMenu: "Explore menu",
       exploreSubtitle:
         "Choose a section to view the full menu in your language.",
-      currentMenu: "Current menu",
-      currentMenuTitle: "Our menu",
       categories: {
         carta: "Menu",
         tostadas_bocadillos: "Toasts / Sandwiches",
@@ -129,15 +98,13 @@ export default function HomePage() {
       },
     },
     fr: {
-      eyebrow: "Bar · Tapas · Son Veri Nou",
+      eyebrow: "Son Veri Nou",
       digitalMenu: "Carte digitale",
       intro:
         "Cuisine décontractée avec sa propre identité, suggestions du jour et carte pensée pour une lecture rapide via QR.",
       exploreMenu: "Explorer la carte",
       exploreSubtitle:
         "Choisissez une section pour voir le menu complet dans votre langue.",
-      currentMenu: "Menu actuel",
-      currentMenuTitle: "Notre carte",
       categories: {
         carta: "Carte",
         tostadas_bocadillos: "Toasts / Sandwichs",
@@ -148,15 +115,13 @@ export default function HomePage() {
       },
     },
     de: {
-      eyebrow: "Bar · Tapas · Son Veri Nou",
+      eyebrow: "Son Veri Nou",
       digitalMenu: "Digitale Speisekarte",
       intro:
         "Lockere Küche mit eigener Identität, Tagesangebote und eine Speisekarte für schnelles Lesen per QR.",
       exploreMenu: "Speisekarte entdecken",
       exploreSubtitle:
         "Wähle einen Bereich, um die vollständige Karte in deiner Sprache zu sehen.",
-      currentMenu: "Aktuelle Karte",
-      currentMenuTitle: "Unsere Karte",
       categories: {
         carta: "Speisekarte",
         tostadas_bocadillos: "Toast / Bocadillos",
@@ -230,24 +195,6 @@ export default function HomePage() {
     ensaladasCasa,
   ].filter(Boolean) as Special[];
 
-  /*
-  ========================================================
-  AGRUPAR CARTA POR CATEGORÍA
-  ========================================================
-  */
-  const groupedMenu = useMemo(() => {
-    return menuItems.reduce((acc: Record<string, MenuItem[]>, item) => {
-      const categoryName = item.category || "Sin categoría";
-
-      if (!acc[categoryName]) {
-        acc[categoryName] = [];
-      }
-
-      acc[categoryName].push(item);
-      return acc;
-    }, {});
-  }, [menuItems]);
-
   if (loading) {
     return (
       <main className="site-shell">
@@ -281,11 +228,11 @@ export default function HomePage() {
 
   return (
     <main className="site-shell">
-      {/* HERO / CABECERA NUEVA */}
+      {/* HERO / CABECERA PRINCIPAL */}
       <section className="site-container pt-8 pb-6 md:pt-12 md:pb-10">
         <div className="dark-panel overflow-hidden p-6 md:p-10">
           <div className="flex flex-col gap-8">
-            {/* Barra superior con idiomas */}
+            {/* Barra superior con ubicación e idiomas */}
             <div className="flex items-start justify-between gap-4">
               <div className="text-left">
                 <p className="eyebrow">{t.eyebrow}</p>
@@ -315,11 +262,12 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Centro visual */}
+            {/* Centro visual de marca */}
             <div className="flex flex-col items-center text-center">
               <h1 className="brand-title">
                 N<span className="text-[#d68a1f]">Y</span>RVANA
               </h1>
+
               <p className="brand-subtitle mt-4">{t.digitalMenu}</p>
 
               <div className="accent-line mt-6 w-full max-w-md" />
@@ -345,79 +293,48 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* BOTONES / ACCESOS A SECCIONES */}
-      <section className="site-container pb-8">
-        <div className="paper-panel p-5 md:p-8">
-          <div className="mb-8">
-            <p className="eyebrow">{t.exploreMenu}</p>
-            <h2 className="section-title mt-3">{t.exploreMenu}</h2>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#4f4f4f]">
-              {t.exploreSubtitle}
-            </p>
-            <div className="divider-dark mt-4" />
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {staticSections.map((section) => (
-              <button
-                key={section.slug}
-                type="button"
-                onClick={() =>
-                  alert(
-                    `Próximo paso: abrir sección "${section.slug}" en idioma "${language}".`
-                  )
-                }
-                className="group rounded-[1.6rem] border border-black/10 bg-[#f8f1e7] p-5 text-left shadow-sm transition duration-200 hover:-translate-y-[2px] hover:shadow-md"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-2xl">{section.emoji}</p>
-                    <h3 className="mt-4 text-lg font-extrabold uppercase tracking-wide text-[#202020]">
-                      {t.categories[section.slug]}
-                    </h3>
-                    <p className="mt-2 text-sm text-[#5a5a5a]">
-                      {language.toUpperCase()}
-                    </p>
-                  </div>
-
-                  <span className="text-xl text-[#d68a1f] transition group-hover:translate-x-1">
-                    →
-                  </span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CARTA ACTUAL QUE YA TENÍAS */}
+      {/* ACCESOS A SECCIONES DEL MENÚ */}
       <section className="site-container pb-12">
-        <div className="paper-panel p-5 md:p-8">
-          <div className="mb-8">
-            <p className="eyebrow">{t.currentMenu}</p>
-            <h2 className="section-title mt-3">{t.currentMenuTitle}</h2>
-            <div className="divider-dark mt-4" />
-          </div>
+        {/* Encabezado de la sección fuera de panel crema */}
+        <div className="mb-8 px-2 text-center md:px-0 md:text-left">
+          <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#d68a1f]">
+            {t.exploreMenu}
+          </p>
 
-          <div className="space-y-10">
-            {Object.keys(groupedMenu).map((categoryName) => (
-              <section key={categoryName}>
-                <h3 className="menu-category-title">{categoryName}</h3>
+          <h2 className="mt-3 text-3xl font-black uppercase tracking-[0.08em] text-white md:text-4xl">
+            {t.exploreMenu}
+          </h2>
 
-                <div>
-                  {groupedMenu[categoryName].map((item) => (
-                    <MenuItemCard
-                      key={item.id}
-                      name={item.name}
-                      description={item.description}
-                      price={item.price}
-                      category={item.category}
-                    />
-                  ))}
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-white/80 md:text-left md:text-base">
+            {t.exploreSubtitle}
+          </p>
+        </div>
+
+        {/* Grilla de accesos compacta, pensada para móvil */}
+        <div className="grid gap-3 px-2 sm:grid-cols-2 sm:gap-4 sm:px-0 xl:grid-cols-3">
+          {staticSections.map((section) => (
+            <button
+              key={section.slug}
+              type="button"
+              onClick={() =>
+                alert(
+                  `Próximo paso: abrir sección "${section.slug}" en idioma "${language}".`
+                )
+              }
+              className="group rounded-[1.35rem] border border-black/10 bg-[#f8f1e7] px-4 py-3 text-left shadow-sm transition duration-200 hover:-translate-y-[1px] hover:shadow-md sm:rounded-[1.55rem] sm:px-5 sm:py-4"
+            >
+              {/* Contenido horizontal, sin flecha, más limpio */}
+              <div className="flex items-center justify-start gap-3 sm:gap-4">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <span className="text-xl sm:text-2xl">{section.emoji}</span>
+
+                  <h3 className="text-[0.95rem] font-extrabold uppercase tracking-[0.06em] text-[#202020] sm:text-base md:text-lg">
+                    {t.categories[section.slug]}
+                  </h3>
                 </div>
-              </section>
-            ))}
-          </div>
+              </div>
+            </button>
+          ))}
         </div>
       </section>
 
@@ -428,9 +345,11 @@ export default function HomePage() {
         </section>
       )}
 
+      {/* FOOTER */}
       <footer className="site-container pb-10">
-        <div className="text-center text-xs uppercase tracking-[0.28em] text-white/45">
-          NIRVANA · Son Veri Nou
+        <div className="text-center text-xs uppercase tracking-[0.28em]">
+          <span className="text-[#d68a1f]">NIRVANA</span>
+          <span className="text-white/55"> · Son Veri Nou</span>
         </div>
       </footer>
     </main>
