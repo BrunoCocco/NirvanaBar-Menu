@@ -201,7 +201,9 @@ export default function HomePage() {
         <section className="site-container py-10">
           <div className="dark-panel p-8 text-center">
             <p className="brand-subtitle">NIRVANA</p>
-            <h1 className="mt-4 text-2xl font-bold">Cargando carta...</h1>
+            <h1 className="mt-4 text-2xl font-bold text-[var(--accent)]">
+              Cargando carta...
+            </h1>
           </div>
         </section>
       </main>
@@ -214,8 +216,12 @@ export default function HomePage() {
         <section className="site-container py-10">
           <div className="dark-panel p-8 text-center">
             <p className="brand-subtitle">NIRVANA</p>
-            <h1 className="mt-4 text-2xl font-bold">Ups...</h1>
-            <p className="mt-3 text-sm text-white/70">{errorMessage}</p>
+            <h1 className="mt-4 text-2xl font-bold text-[var(--accent)]">
+              Ups...
+            </h1>
+            <p className="mt-3 text-sm text-[var(--text-dark-soft)]">
+              {errorMessage}
+            </p>
 
             <button onClick={loadMenuData} className="btn-primary mt-6">
               Reintentar
@@ -265,7 +271,7 @@ export default function HomePage() {
             {/* Centro visual de marca */}
             <div className="flex flex-col items-center text-center">
               <h1 className="brand-title">
-                N<span className="text-[#d68a1f]">Y</span>RVANA
+                N<span className="text-[var(--accent)]">Y</span>RVANA
               </h1>
 
               <p className="brand-subtitle mt-4">{t.digitalMenu}</p>
@@ -273,7 +279,7 @@ export default function HomePage() {
               <div className="accent-line mt-6 w-full max-w-md" />
 
               <div className="mt-6 max-w-2xl">
-                <p className="text-sm leading-7 text-white/80 md:text-base">
+                <p className="text-sm leading-7 text-[var(--text-dark-soft)] md:text-base">
                   {t.intro}
                 </p>
               </div>
@@ -297,15 +303,15 @@ export default function HomePage() {
       <section className="site-container pb-12">
         {/* Encabezado de la sección fuera de panel crema */}
         <div className="mb-8 px-2 text-center md:px-0 md:text-left">
-          <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#d68a1f]">
+          <p className="text-xs font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
             {t.exploreMenu}
           </p>
 
-          <h2 className="mt-3 text-3xl font-black uppercase tracking-[0.08em] text-white md:text-4xl">
+          <h2 className="mt-3 text-3xl font-black uppercase tracking-[0.08em] text-[var(--accent)] md:text-4xl">
             {t.exploreMenu}
           </h2>
 
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-white/80 md:text-left md:text-base">
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-dark-soft)] md:text-left md:text-base">
             {t.exploreSubtitle}
           </p>
         </div>
@@ -321,14 +327,14 @@ export default function HomePage() {
                   `Próximo paso: abrir sección "${section.slug}" en idioma "${language}".`
                 )
               }
-              className="group rounded-[1.35rem] border border-black/10 bg-[#f8f1e7] px-4 py-3 text-left shadow-sm transition duration-200 hover:-translate-y-[1px] hover:shadow-md sm:rounded-[1.55rem] sm:px-5 sm:py-4"
+              className="group rounded-[1.35rem] border border-[var(--line-dark)] bg-[var(--paper)] px-4 py-3 text-left shadow-sm transition duration-200 hover:-translate-y-[1px] hover:shadow-md sm:rounded-[1.55rem] sm:px-5 sm:py-4"
             >
               {/* Contenido horizontal, sin flecha, más limpio */}
               <div className="flex items-center justify-start gap-3 sm:gap-4">
                 <div className="flex items-center gap-2.5 sm:gap-3">
                   <span className="text-xl sm:text-2xl">{section.emoji}</span>
 
-                  <h3 className="text-[0.95rem] font-extrabold uppercase tracking-[0.06em] text-[#202020] sm:text-base md:text-lg">
+                  <h3 className="text-[0.95rem] font-extrabold uppercase tracking-[0.06em] text-[var(--text-dark)] sm:text-base md:text-lg">
                     {t.categories[section.slug]}
                   </h3>
                 </div>
@@ -348,8 +354,8 @@ export default function HomePage() {
       {/* FOOTER */}
       <footer className="site-container pb-10">
         <div className="text-center text-xs uppercase tracking-[0.28em]">
-          <span className="text-[#d68a1f]">NIRVANA</span>
-          <span className="text-white/55"> · Son Veri Nou</span>
+          <span className="text-[var(--accent)]">NIRVANA</span>
+          <span className="text-[var(--text-dark-soft)]"> · Son Veri Nou</span>
         </div>
       </footer>
     </main>
@@ -376,8 +382,8 @@ function LanguageButton({
       onClick={onClick}
       className={`rounded-full border px-3 py-1.5 text-xs font-bold uppercase tracking-[0.2em] transition ${
         active
-          ? "border-[#d68a1f] bg-[#d68a1f] text-black"
-          : "border-white/20 bg-white/5 text-white/75 hover:bg-white/10"
+          ? "border-[var(--accent)] bg-[var(--accent)] text-white"
+          : "border-[var(--accent)] bg-transparent text-[var(--accent)] hover:bg-[var(--accent)]/10"
       }`}
     >
       {label}

@@ -2,19 +2,31 @@
 
 /* =========================================================
    VARIABLES DE MARCA
-   Acá concentramos los colores principales del proyecto.
+   Inversión visual pedida:
+   - fondo claro
+   - títulos y acentos en naranja
+   - texto general en gris
 ========================================================= */
 :root {
-  --background: #0b0b0b;
-  --foreground: #f5f1e8;
-  --paper: #f1ece2;
-  --paper-2: #e7dfd1;
-  --text-dark: #1f1f1f;
-  --muted: #6b6b6b;
-  --accent: #d68a1f;
-  --accent-strong: #f29a1f;
-  --line: rgba(255, 255, 255, 0.12);
-  --line-dark: rgba(0, 0, 0, 0.12);
+  --background: #efe6da;
+  --background-2: #e6dacb;
+
+  --foreground: #5f5b58;
+
+  --paper: #f5ede3;
+  --paper-2: #eadfce;
+
+  --text-dark: #5f5b58;
+  --text-dark-soft: #736e69;
+  --muted: #8a837b;
+
+  --accent: #c97d24;
+  --accent-strong: #d8902c;
+  --accent-deep: #a8651b;
+
+  --frame: #c97d24;
+  --line: rgba(95, 91, 88, 0.14);
+  --line-dark: rgba(95, 91, 88, 0.14);
 }
 
 /* Reset básico */
@@ -30,8 +42,8 @@ body {
   margin: 0;
   padding: 0;
   background:
-    radial-gradient(circle at top left, rgba(214, 138, 31, 0.08), transparent 20%),
-    linear-gradient(to bottom, #0b0b0b, #111111);
+    radial-gradient(circle at top left, rgba(201, 125, 36, 0.08), transparent 22%),
+    linear-gradient(to bottom, var(--background), var(--background-2));
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -68,16 +80,17 @@ img {
 .paper-panel {
   background: linear-gradient(to bottom, var(--paper), var(--paper-2));
   color: var(--text-dark);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(95, 91, 88, 0.08);
   border-radius: 24px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 18px 40px rgba(95, 91, 88, 0.08);
 }
 
 .dark-panel {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.55);
   border: 1px solid var(--line);
   border-radius: 24px;
   backdrop-filter: blur(8px);
+  box-shadow: 0 16px 34px rgba(95, 91, 88, 0.08);
 }
 
 /* =========================================================
@@ -89,13 +102,14 @@ img {
   letter-spacing: 0.08em;
   font-weight: 300;
   text-transform: uppercase;
+  color: var(--accent);
 }
 
 .brand-subtitle {
   font-size: 0.95rem;
   letter-spacing: 0.45em;
   text-transform: uppercase;
-  color: rgba(245, 241, 232, 0.8);
+  color: var(--text-dark-soft);
 }
 
 .section-title {
@@ -103,7 +117,7 @@ img {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-dark);
+  color: var(--accent);
 }
 
 .eyebrow {
@@ -120,7 +134,7 @@ img {
 .divider-dark {
   width: 100%;
   height: 1px;
-  background: rgba(0, 0, 0, 0.14);
+  background: rgba(95, 91, 88, 0.14);
 }
 
 .accent-line {
@@ -137,7 +151,7 @@ img {
   border: none;
   border-radius: 999px;
   background: var(--accent);
-  color: #111111;
+  color: #ffffff;
   font-weight: 700;
   padding: 12px 22px;
   cursor: pointer;
@@ -156,8 +170,8 @@ img {
 .textarea-base {
   width: 100%;
   border-radius: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(95, 91, 88, 0.12);
+  background: rgba(255, 255, 255, 0.78);
   color: var(--text-dark);
   padding: 14px 16px;
   outline: none;
@@ -166,7 +180,7 @@ img {
 .input-base:focus,
 .textarea-base:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(214, 138, 31, 0.14);
+  box-shadow: 0 0 0 3px rgba(201, 125, 36, 0.14);
 }
 
 .textarea-base {
@@ -178,7 +192,7 @@ img {
    MENÚ
 ========================================================= */
 .menu-card {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(95, 91, 88, 0.08);
   padding: 16px 0;
 }
 
@@ -189,7 +203,7 @@ img {
 .menu-price {
   font-weight: 800;
   font-size: 1.05rem;
-  color: #2c2c2c;
+  color: var(--text-dark);
 }
 
 .menu-category-title {
@@ -197,7 +211,7 @@ img {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-dark);
+  color: var(--accent);
   margin-bottom: 14px;
 }
 
@@ -206,11 +220,11 @@ img {
 ========================================================= */
 .special-banner {
   background:
-    linear-gradient(135deg, rgba(214, 138, 31, 0.16), rgba(255, 255, 255, 0.35)),
+    linear-gradient(135deg, rgba(201, 125, 36, 0.08), rgba(255, 255, 255, 0.55)),
     linear-gradient(to bottom, var(--paper), var(--paper-2));
   color: var(--text-dark);
-  border: 1px solid rgba(214, 138, 31, 0.22);
+  border: 1px solid rgba(201, 125, 36, 0.18);
   border-radius: 24px;
   padding: 22px;
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 14px 35px rgba(95, 91, 88, 0.08);
 }
