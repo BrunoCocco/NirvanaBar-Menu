@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import SpecialBanner from "@/components/SpecialBanner";
 
@@ -28,6 +29,8 @@ export default function HomePage() {
 
   // Idioma actual de la interfaz
   const [language, setLanguage] = useState<Language>("es");
+
+  const router = useRouter();
 
   useEffect(() => {
     loadMenuData();
@@ -151,6 +154,19 @@ export default function HomePage() {
     { slug: "carta_vinos", emoji: "🍷" },
     { slug: "cafeteria", emoji: "☕" },
   ] as const;
+
+  /*
+  ========================================================
+  MAPEO ENTRE UI Y SLUG REAL DE BASE
+  ========================================================
+
+  Mantenemos los nombres visuales actuales para no romper
+  translations, pero resolvemos el slug técnico real cuando
+  una sección ya existe en public.menu_sections.
+  */
+  const sectionSlugMap: Record<string, string> = {
+    carta_vinos: "wine-list",
+  };
 
   /*
   ========================================================
@@ -318,29 +334,29 @@ export default function HomePage() {
 
         {/* Grilla de accesos compacta, pensada para móvil */}
         <div className="grid gap-3 px-2 sm:grid-cols-2 sm:gap-4 sm:px-0 xl:grid-cols-3">
-          {staticSections.map((section) => (
-            <button
-              key={section.slug}
-              type="button"
-              onClick={() =>
-                alert(
-                  `Próximo paso: abrir sección "${section.slug}" en idioma "${language}".`
-                )
-              }
-              className="group rounded-[1.35rem] border border-[var(--line-dark)] bg-[var(--paper)] px-4 py-3 text-left shadow-sm transition duration-200 hover:-translate-y-[1px] hover:shadow-md sm:rounded-[1.55rem] sm:px-5 sm:py-4"
-            >
-              {/* Contenido horizontal, sin flecha, más limpio */}
-              <div className="flex items-center justify-start gap-3 sm:gap-4">
-                <div className="flex items-center gap-2.5 sm:gap-3">
-                  <span className="text-xl sm:text-2xl">{section.emoji}</span>
+          {staticSections.map((section) => {
+            const resolvedSlug = sectionSlugMap[section.slug] || section.slug;
 
-                  <h3 className="text-[0.95rem] font-extrabold uppercase tracking-[0.06em] text-[var(--text-dark)] sm:text-base md:text-lg">
-                    {t.categories[section.slug]}
-                  </h3>
+            return (
+              <button
+                key={section.slug}
+                type="button"
+                onClick={() => router.push(`/menu/${resolvedSlug}?lang=${language}`)}
+                className="group rounded-[1.35rem] border border-[var(--line-dark)] bg-[var(--paper)] px-4 py-3 text-left shadow-sm transition duration-200 hover:-translate-y-[1px] hover:shadow-md sm:rounded-[1.55rem] sm:px-5 sm:py-4"
+              >
+                {/* Contenido horizontal, sin flecha, más limpio */}
+                <div className="flex items-center justify-start gap-3 sm:gap-4">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <span className="text-xl sm:text-2xl">{section.emoji}</span>
+
+                    <h3 className="text-[0.95rem] font-extrabold uppercase tracking-[0.06em] text-[var(--text-dark)] sm:text-base md:text-lg">
+                      {t.categories[section.slug]}
+                    </h3>
+                  </div>
                 </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
       </section>
 
